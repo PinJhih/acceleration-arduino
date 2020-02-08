@@ -14,6 +14,14 @@ void setup() {
 }
 
 void loop() {
+  //btn listener
+  while(digitalRead(BTN_START)==LOW){
+    delay(100);
+  }
+  while(digitalRead(BTN_START)==HIGH){
+    delay(100);
+  }
+  
   for(short i=0;i!=MAX_TIME*10;i++){
     delay(100);
     unsigned int l = sensor.ping();
