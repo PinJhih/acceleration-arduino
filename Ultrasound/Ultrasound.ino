@@ -23,11 +23,11 @@ void loop() {
     delay(100);
   
   while(digitalRead(BTN_START)==LOW){
-    delay(CYCLE_TIME);
     digitalWrite(LED, HIGH);
     unsigned int l = sensor.ping();
     Serial.print(sensor.convert_cm(l)); 
     Serial.println("cm");
+    delay(CYCLE_TIME);
   }
   digitalWrite(LED, LOW);
   
