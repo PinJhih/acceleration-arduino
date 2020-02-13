@@ -1,18 +1,41 @@
-#include <NewPing.h>
-
-#define LED 3
-#define BTN_START 10
+#define LED_PIN 3
+#define BTN_START 8
 #define TRIG_PIN 12
-#define ECHO_PIN 11
-#define MAX_DISTANCE 300
-#define CYCLE_TIME 50
+#define ECHO_PIN 13
+#define USONIC_DIV 58.0
+#define MEASURE_SAMPLE_DELAY 10
+#define MEASURE_SAMPLES 5
 
-NewPing sensor(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
+long time=0;
+  
+long singleMeasurement()
+{
+  long duration = 0;
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+  duration = pulseIn(ECHO_PIN, HIGH);
+  return (((float) duration / USONIC_DIV) * 10.0);
+}
+
+long measure()
+{
+  long measureSum = 0;
+  for (int i = 0; i < MEASURE_SAMPLES; i++)
+  {
+    delay(MEASURE_SAMPLE_DELAY);
+    measureSum += singleMeasurement();
+  }
+  return measureSum / MEASURE_SAMPLES;
+}
 
 void setup() {
   Serial.begin(115200);
   pinMode(BTN_START, INPUT);
-  pinMode(LED, OUTPUT);
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  digitalWrite(TRIG_PIN, LOW);
 }
 
 void loop() {
@@ -22,14 +45,14 @@ void loop() {
   while(digitalRead(BTN_START)==HIGH)
     delay(100);
   
+  digitalWrite(LED_PIN, HIGH);
+  time=0; 
   while(digitalRead(BTN_START)==LOW){
-    digitalWrite(LED, HIGH);
-    unsigned int l = sensor.ping();
-    Serial.print(sensor.convert_cm(l)); 
-    Serial.println("cm");
-    delay(CYCLE_TIME);
+    long distance = measure();
+    Serial.println("Time:" + time); 
+    Serial.println("distance:" + distance); 
   }
-  digitalWrite(LED, LOW);
+  digitalWrite(LED_PIN, LOW);
   
   while(digitalRead(BTN_START)==HIGH)
     delay(100);
