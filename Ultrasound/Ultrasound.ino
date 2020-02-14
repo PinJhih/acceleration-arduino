@@ -8,7 +8,8 @@
 #define MEASURE_SAMPLES 5
 
 long time = 0;
-
+char space = 9;
+  
 long singleMeasurement()
 {
   long duration = 0;
@@ -40,7 +41,8 @@ void loop() {
   time=0; 
   while(digitalRead(BTN_START)==LOW){
     long distance = singleMeasurement();
-    Serial.println(time);
+    Serial.print(time);
+    Serial.print(space);
     Serial.println(distance);
     delay(10);
     time+=10;
