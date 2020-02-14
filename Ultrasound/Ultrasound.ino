@@ -32,8 +32,6 @@ void setup() {
 void loop() {
   while(digitalRead(INFRARED_PIN)==LOW)
     delay(10);
-  while(digitalRead(INFRARED_PIN)==HIGH)
-    delay(10);
   
   digitalWrite(LED_PIN, HIGH);
   time=0; 
